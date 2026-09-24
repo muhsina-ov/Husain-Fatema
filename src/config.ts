@@ -63,7 +63,7 @@ export const wedding = {
 export const createGoogleCalendarUrl = (eventName: string, dateISO: string, venue: string = "Ezzy Masjid", timeDetails?: string) => {
   const start = new Date(dateISO);
   const end = new Date(start.getTime() + 3 * 60 * 60 * 1000);
-  const fmt = (d: Date) => d.toISOString().replace(/[-:]|\.\d{3}/g, "").slice(0, 15) + "Z";
+  const fmt = (d: Date) => d.toISOString().replaceAll("-", "").replaceAll(":", "").replace(/\.\d{3}/g, "").slice(0, 15) + "Z";
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: `${eventName} — ${wedding.groom} & ${wedding.bride}`,
@@ -77,7 +77,7 @@ export const createGoogleCalendarUrl = (eventName: string, dateISO: string, venu
 export const downloadICS = (eventName: string, dateISO: string, venue: string = "Ezzy Masjid", timeDetails?: string) => {
   const start = new Date(dateISO);
   const end = new Date(start.getTime() + 3 * 60 * 60 * 1000);
-  const fmt = (d: Date) => d.toISOString().replace(/[-:.]/g, "").slice(0, 15) + "Z";
+  const fmt = (d: Date) => d.toISOString().replaceAll("-", "").replaceAll(":", "").replaceAll(".", "").slice(0, 15) + "Z";
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
