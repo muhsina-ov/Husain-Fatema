@@ -1,53 +1,63 @@
-import Reveal, { ParallaxBlock } from "../components/Reveal";
+import React, { useState } from "react";
+import { Share2, Copy, Check, Heart } from "lucide-react";
 import { wedding } from "../config";
 
-export default function Footer() {
+export const Footer: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(
+      `*Wedding Invitation*\n\nYou are cordially invited to celebrate the Wedding Ceremony of *${wedding.groomFull}* & *${wedding.brideFull}*.\n\n📅 *Khushi Ni Majlis / Shehre Ghaat:* 1st Nov (Ladies 7PM | Gents 8:30PM)\n📅 *Darees:* 21st Nov 7:00 PM\n📅 *Wedding Reception:* 22nd Nov 1:00 PM\n📍 *Venue:* Ezzy Masjid`
+    );
+    window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
   return (
-    <footer className="relative overflow-hidden px-6 pb-20 pt-24">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1814]/12 to-transparent" />
-
-      {/* Soft couple silhouette fade */}
-      <ParallaxBlock
-        speed={0.15}
-        className="pointer-events-none absolute inset-x-0 bottom-0 top-8 opacity-[0.06]"
-      >
-        <img
-          src="/assets/layers/layer-couple.png"
-          alt=""
-          className="mx-auto h-full max-w-md object-contain object-bottom"
-        />
-      </ParallaxBlock>
-
-      <div className="relative z-10 mb-10 overflow-hidden py-3">
-        <div
-          className="flex w-max whitespace-nowrap"
-          style={{ animation: "marquee 28s linear infinite" }}
-        >
-          {[0, 1].map((n) => (
-            <span
-              key={n}
-              className="font-display px-4 text-sm uppercase tracking-[0.36em] text-[#8a7a68]"
-            >
-              {Array(4)
-                .fill(`${wedding.groom} & ${wedding.bride}  ·  ${wedding.dateLabel}  ·  `)
-                .join("")}
-            </span>
-          ))}
+    <footer className="py-16 px-4 border-t border-[#D4AF37]/30 text-center space-y-8 bg-[#F5EFEB] text-[#2A221E]">
+      <div className="max-w-md mx-auto space-y-3">
+        <div className="text-xl font-arabic text-[#B8860B] leading-relaxed">
+          بَارَكَ ٱللَّهُ لَكَ وَبَارَكَ عَلَيْكَ وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ
         </div>
+        <p className="text-xs font-serif italic text-[#8B6508]">
+          "May Allah bless you and shower His blessings upon you and join you together in goodness."
+        </p>
       </div>
 
-      <Reveal className="relative z-10 mx-auto flex max-w-sm flex-col items-center gap-4 text-center">
-        <p className="font-script text-4xl leading-snug text-[#1a1814] sm:text-5xl">
-          We can't wait to celebrate with you
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={handleShareWhatsApp}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-700 hover:bg-emerald-600 text-white font-cinzel font-bold text-xs tracking-wider shadow-md transition-all active:scale-95"
+        >
+          <Share2 className="w-4 h-4" />
+          <span>SHARE VIA WHATSAPP</span>
+        </button>
+
+        <button
+          onClick={handleCopyLink}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full card-ivory border border-[#D4AF37] text-[#B8860B] font-cinzel font-bold text-xs tracking-wider hover:bg-[#D4AF37]/10 transition-all active:scale-95"
+        >
+          {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-[#B8860B]" />}
+          <span>{copied ? "LINK COPIED!" : "COPY INVITATION LINK"}</span>
+        </button>
+      </div>
+
+      <div className="space-y-2 pt-6 border-t border-[#D4AF37]/20 max-w-sm mx-auto">
+        <div className="flex items-center justify-center gap-2 text-xs font-cinzel text-[#8B6508]">
+          <span>WITH BLESSINGS &amp; BEST COMPLIMENTS</span>
+          <Heart className="w-3.5 h-3.5 fill-[#B8860B] text-[#B8860B]" />
+        </div>
+        <p className="text-[11px] font-sans text-[#2A221E]/70 uppercase tracking-widest font-semibold">
+          MATKAWALA &amp; KANCHWALA FAMILIES
         </p>
-        <p className="text-[11px] uppercase tracking-[0.32em] text-[#7a6d60]">
-          With love, the Kanchwala & Matkawala families
-        </p>
-        <div className="h-px w-28 bg-[#1a1814]/15 my-2" />
-        <p className="font-display text-xs italic text-[#8a7a68]">
-          Blessings & Duas Always
-        </p>
-      </Reveal>
+      </div>
     </footer>
   );
-}
+};
+
+export default Footer;

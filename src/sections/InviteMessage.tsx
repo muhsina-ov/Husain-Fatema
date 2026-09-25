@@ -3,17 +3,14 @@ import Reveal, { ParallaxBlock, Stagger, staggerItem } from "../components/Revea
 import { wedding } from "../config";
 
 export default function InviteMessage() {
-  const words = wedding.verse.text.split(" ");
+  const verseWords = "With soft hearts and grateful families, we invite you to witness our wedding celebrations — a quiet beginning, danced into forever.".split(" ");
 
   return (
-    <section className="relative overflow-hidden px-6 py-28">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1814]/12 to-transparent" />
+    <section className="relative overflow-hidden px-6 py-20 bg-[#F5EFEB]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B8860B]/25 to-transparent" />
 
-      {/* Soft floating bouquet watermark */}
-      <ParallaxBlock
-        speed={0.22}
-        className="pointer-events-none absolute -right-8 top-10 opacity-[0.07] sm:right-8"
-      >
+      {/* Floating bouquet watermark */}
+      <ParallaxBlock speed={0.22} className="pointer-events-none absolute -right-8 top-10 opacity-[0.09] sm:right-8">
         <img
           src="/assets/layers/layer-05-bouquet.png"
           alt=""
@@ -27,9 +24,9 @@ export default function InviteMessage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[11px] uppercase tracking-[0.4em] text-[#8a7a68]"
+          className="font-serif text-3xl font-bold tracking-widest text-[#2A221E]"
         >
-          An Auspicious Union
+          {wedding.verse.arabic}
         </motion.p>
 
         <motion.div
@@ -37,38 +34,30 @@ export default function InviteMessage() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 h-px w-16 origin-center bg-[#1a1814]/20"
+          className="mt-6 h-px w-20 origin-center bg-[#B8860B]/40"
         />
 
-        <Stagger
-          className="mt-8 flex flex-wrap justify-center gap-x-1.5 gap-y-1"
-          stagger={0.035}
-        >
-          {words.map((word, i) => (
+        <Stagger className="mt-6 flex flex-wrap justify-center gap-x-1.5 gap-y-1" stagger={0.035}>
+          {verseWords.map((word, i) => (
             <motion.span
               key={`${word}-${i}`}
               variants={staggerItem}
-              className="font-display text-[1.35rem] leading-[1.55] text-[#2c261f] sm:text-[1.5rem]"
+              className="font-serif text-xl leading-[1.6] text-[#2A221E] sm:text-2xl"
             >
               {word}
             </motion.span>
           ))}
         </Stagger>
 
-        <Stagger className="mt-10 flex flex-col gap-2" stagger={0.12}>
-          <motion.p
-            variants={staggerItem}
-            className="text-[11px] uppercase tracking-[0.28em] text-[#7a6d60]"
-          >
-            {wedding.groomParents}
-          </motion.p>
-          <motion.p
-            variants={staggerItem}
-            className="text-[11px] uppercase tracking-[0.28em] text-[#7a6d60]"
-          >
-            {wedding.brideParents}
-          </motion.p>
-        </Stagger>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="mt-8 font-serif text-xs uppercase tracking-[0.35em] text-[#916E32]"
+        >
+          Fatema Mustali Bhai Matkawala &amp; Husain Hatim Bhai Kanchwala
+        </motion.p>
       </Reveal>
     </section>
   );

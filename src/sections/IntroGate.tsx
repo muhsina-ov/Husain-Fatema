@@ -1,191 +1,111 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { wedding } from "../config";
+import { Sparkles, Heart } from "lucide-react";
 
-const ease: [number, number, number, number] = [0.65, 0, 0.35, 1];
+interface IntroGateProps {
+  onOpening?: () => void;
+  onOpened?: () => void;
+}
 
-export default function IntroGate({
-  onOpening,
-  onOpened,
-}: {
-  onOpening: () => void;
-  onOpened: () => void;
-}) {
-  const [opening, setOpening] = useState(false);
+export const IntroGate: React.FC<IntroGateProps> = ({ onOpening, onOpened }) => {
+  const [isOpening, setIsOpening] = useState(false);
+  const [isDestroyed, setIsDestroyed] = useState(false);
 
   const handleOpen = () => {
-    if (opening) return;
-    setOpening(true);
-    onOpening();
+    if (isOpening || isDestroyed) return;
+    setIsOpening(true);
+    if (onOpening) onOpening();
+
+    setTimeout(() => {
+      setIsDestroyed(true);
+      if (onOpened) onOpened();
+    }, 1300);
   };
 
+  if (isDestroyed) return null;
+
   return (
-    <motion.div
-      className="fixed inset-0 z-50 overflow-hidden"
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.45 }}
-    >
-      {/* Left paper panel */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden select-none">
+      {/* Left Sliding Curtain Door */}
       <motion.div
-        className="absolute inset-y-0 left-0 w-1/2 overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(110deg, #efe6d8 0%, #f6f0e6 45%, #ebe2d4 100%)",
-        }}
-        animate={opening ? { x: "-105%" } : { x: 0 }}
-        transition={{ duration: 1.35, delay: 0.25, ease }}
+        initial={{ x: "0%" }}
+        animate={{ x: isOpening ? "-100%" : "0%" }}
+        transition={{ duration: 1.3, ease: [0.77, 0, 0.175, 1] }}
+        className="absolute left-0 top-0 bottom-0 w-1/2 bg-[#F5EFEB] border-r-2 border-[#D4AF37] shadow-2xl z-20"
       >
-        <div
-          className="absolute inset-0 opacity-40 mix-blend-multiply"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E\")",
-          }}
-        />
+        <div className="w-full h-full bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-white/60 via-transparent to-transparent opacity-70" />
       </motion.div>
 
-      {/* Right paper panel */}
+      {/* Right Sliding Curtain Door */}
       <motion.div
-        className="absolute inset-y-0 right-0 w-1/2 overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(250deg, #efe6d8 0%, #f6f0e6 45%, #ebe2d4 100%)",
-        }}
-        animate={opening ? { x: "105%" } : { x: 0 }}
-        transition={{ duration: 1.35, delay: 0.25, ease }}
-        onAnimationComplete={() => opening && onOpened()}
+        initial={{ x: "0%" }}
+        animate={{ x: isOpening ? "100%" : "0%" }}
+        transition={{ duration: 1.3, ease: [0.77, 0, 0.175, 1] }}
+        className="absolute right-0 top-0 bottom-0 w-1/2 bg-[#F5EFEB] border-l-2 border-[#D4AF37] shadow-2xl z-20"
       >
-        <div
-          className="absolute inset-0 opacity-40 mix-blend-multiply"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E\")",
-          }}
-        />
+        <div className="w-full h-full bg-[radial-gradient(ellipse_at_left,_var(--tw-gradient-stops))] from-white/60 via-transparent to-transparent opacity-70" />
       </motion.div>
 
-      {/* Vertical gold line seam */}
+      {/* Central Royal Envelope Card & 3D Gold Wax Seal */}
       <motion.div
-        className="pointer-events-none absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[#b8860b]/40 to-transparent"
-        animate={opening ? { opacity: 0, scaleY: 0 } : { opacity: 1, scaleY: 1 }}
-        transition={{ duration: 0.5 }}
-      />
-
-      {/* Soft light seam */}
-      <motion.div
-        className="pointer-events-none absolute inset-y-0 left-1/2 w-16 -translate-x-1/2"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent)",
-          filter: "blur(8px)",
+        initial={{ scale: 1, opacity: 1, y: 0 }}
+        animate={{
+          scale: isOpening ? 0.75 : 1,
+          opacity: isOpening ? 0 : 1,
+          y: isOpening ? -80 : 0,
         }}
-        initial={{ opacity: 0, scaleX: 0.15 }}
-        animate={
-          opening
-            ? { opacity: [0, 1, 0], scaleX: [0.15, 1.4, 2.4] }
-            : { opacity: 0.35, scaleX: 0.4 }
-        }
-        transition={{ duration: 1.35, delay: 0.25, ease }}
-      />
-
-      {/* Center Invitation Card */}
-      <motion.div
-        className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
-        animate={
-          opening
-            ? { opacity: 0, scale: 0.94, filter: "blur(6px)" }
-            : { opacity: 1, scale: 1, filter: "blur(0px)" }
-        }
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+        className="relative z-30 w-full max-w-sm mx-4 p-8 card-ivory border-2 border-[#D4AF37] rounded-3xl text-center shadow-2xl flex flex-col items-center justify-center space-y-6 bg-white/95"
       >
-        <div className="relative mx-auto flex w-full max-w-sm flex-col items-center rounded-[2rem] bg-[#fffaf4]/90 px-7 py-9 shadow-[0_25px_70px_rgba(40,30,20,0.14)] ring-1 ring-[rgba(26,24,20,0.08)] backdrop-blur-md">
-          {/* Bismillah calligraphy - exactly one here */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.8 }}
-            className="font-display text-base text-[#9d7b42]"
-          >
-            {wedding.verse.arabic}
-          </motion.p>
+        {/* Top Bismillah Calligraphy */}
+        <div className="text-xl sm:text-2xl font-arabic text-[#B8860B] tracking-wide">
+          بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+        </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.8 }}
-            className="mt-4 text-[10px] uppercase tracking-[0.34em] text-[#7a6d60]"
-          >
-            You are cordially invited to the
-          </motion.p>
+        <div className="space-y-1">
+          <p className="text-[11px] font-cinzel tracking-widest text-[#8B6508] uppercase">
+            YOU ARE CORDIALLY INVITED TO THE WEDDING CEREMONY OF
+          </p>
+          <h1 className="text-2xl font-serif font-bold text-[#2A221E] tracking-wide">
+            {wedding.groomFull} <span className="text-[#B8860B]">&amp;</span> {wedding.brideFull}
+          </h1>
+        </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.32, duration: 0.8 }}
-            className="mt-1 text-[11px] font-medium uppercase tracking-[0.28em] text-[#4a4036]"
-          >
-            Wedding Ceremony of
-          </motion.p>
+        {/* Interactive 3D Gold Wax Seal Stamp */}
+        <button
+          onClick={handleOpen}
+          aria-label="Open Invitation"
+          className="group relative w-24 h-24 rounded-full bg-gradient-to-br from-[#E6C665] via-[#D4AF37] to-[#8B6508] p-1 shadow-2xl cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-300"
+        >
+          {/* Outer Glowing Pulsing Ring */}
+          <div className="absolute -inset-2 rounded-full border-2 border-[#D4AF37]/60 animate-ping opacity-30 pointer-events-none" />
 
-          <motion.h2
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.42, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 font-display text-3xl font-medium tracking-wide text-[#1a1814] sm:text-4xl"
-          >
-            {wedding.groomFull}
-            <span className="my-1 block font-script text-2xl font-normal text-[#9d7b42]">
-              &
+          {/* Inner Wax Seal Core */}
+          <div className="w-full h-full rounded-full bg-[#8B6508] border-2 border-[#FBE393] flex flex-col items-center justify-center text-[#F5EFEB] shadow-inner relative overflow-hidden">
+            <Sparkles className="w-4 h-4 text-[#FBE393] animate-pulse mb-0.5" />
+            <span className="text-sm font-cinzel font-bold text-[#FBE393] tracking-widest">
+              H &amp; F
             </span>
-            {wedding.brideFull}
-          </motion.h2>
-
-          {/* Interactive Wax Seal */}
-          <motion.button
-            type="button"
-            onClick={handleOpen}
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
-            className="group relative my-6 flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-full shadow-[0_12px_32px_rgba(157,123,66,0.35)] transition-all duration-300"
-            style={{
-              background:
-                "radial-gradient(circle at 35% 35%, #d4af37 0%, #b8860b 60%, #8b6508 100%)",
-              border: "3px solid #f4e8c1",
-            }}
-            aria-label="Tap to open invitation"
-          >
-            {/* Wax texture details */}
-            <span className="pointer-events-none absolute inset-1 rounded-full border border-yellow-200/40" />
-            <span className="font-display text-sm font-semibold tracking-widest text-[#fff8eb] drop-shadow-sm">
-              {wedding.monogram}
+            <span className="text-[9px] font-cinzel text-[#FBE393]/90 uppercase tracking-widest mt-0.5">
+              OPEN
             </span>
-            <span className="mt-0.5 text-[8px] font-bold uppercase tracking-[0.24em] text-yellow-100">
-              Open
-            </span>
-          </motion.button>
+          </div>
+        </button>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.75, duration: 0.8 }}
-            className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-[#9d7b42]"
-          >
-            <span>♥</span> Tap Wax Seal to Unroll <span>♥</span>
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.85, duration: 0.8 }}
-            className="mt-2 text-[11px] tracking-wide text-[#7a6d60]"
-          >
-            21st & 22nd November 2026
-          </motion.p>
+        <div className="space-y-1">
+          <p className="text-xs font-cinzel font-semibold text-[#B8860B] tracking-widest uppercase flex items-center justify-center gap-1">
+            <Heart className="w-3 h-3 fill-[#B8860B] text-[#B8860B]" />
+            TAP WAX SEAL TO UNROLL
+            <Heart className="w-3 h-3 fill-[#B8860B] text-[#B8860B]" />
+          </p>
+          <p className="text-[10px] font-sans text-[#2A221E]/60 tracking-wider">
+            1st, 21st &amp; 22nd November 2026
+          </p>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
-}
+};
+
+export default IntroGate;
