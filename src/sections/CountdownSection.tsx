@@ -1,76 +1,109 @@
-import React, { useState, useEffect } from "react";
-import { Clock } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import Reveal from "../components/Reveal";
+import { useLocalTilt } from "../hooks/useParallax";
 import { wedding } from "../config";
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+type Parts = { days: number; hours: number; mins: number; secs: number };
+
+function getParts(target: number): Parts {
+  const diff = Math.max(0, target - Date.now());
+  return {
+    days: Math.floor(diff / 86400000),
+    hours: Math.floor((diff % 86400000) / 3600000),
+    mins: Math.floor((diff % 3600000) / 60000),
+    secs: Math.floor((diff % 60000) / 1000),
+  };
 }
 
-export const CountdownSection: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+function Tick({ value }: { value: number }) {
+  const label = String(value).padStart(2, "0");
+  return (
+    <span className="relative inline-block h-[1.15em] overflow-hidden align-bottom">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={label}
+          initial={{ y: 16, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -16, opacity: 0 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-block tabular-nums"
+        >
+          {label}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
-  useEffect(() => {
-    const targetDate = new Date(wedding.dateISO).getTime();
-
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
-    };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
+function CountCell({
+  label,
+  value,
+  delay,
+}: {
+  label: string;
+  value: number;
+  delay: number;
+}) {
+  const { ref, style } = useLocalTilt(7);
 
   return (
-    <section className="py-12 px-4 max-w-xl mx-auto text-center">
-      <div className="card-ivory border-2 border-[#D4AF37]/40 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
-        <div className="inline-flex items-center gap-2 text-xs font-cinzel font-semibold tracking-widest text-[#B8860B] uppercase">
-          <Clock className="w-4 h-4 text-[#B8860B]" />
-          <span>COUNTDOWN TO THE CELEBRATION</span>
-        </div>
+    <motion.div
+      ref={ref}
+      style={style}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -4 }}
+      className="rounded-[1.35rem] bg-[rgba(26,24,20,0.03)] px-2 py-5 ring-1 ring-[rgba(26,24,20,0.08)] transition-shadow duration-500 hover:shadow-[0_18px_40px_rgba(60,45,30,0.1)]"
+    >
+      <p className="font-display text-3xl text-[#1a1814] sm:text-4xl">
+        <Tick value={value} />
+      </p>
+      <p className="mt-2 text-[9px] uppercase tracking-[0.28em] text-[#7a6d60]">
+        {label}
+      </p>
+    </motion.div>
+  );
+}
 
-        <div className="grid grid-cols-4 gap-2 sm:gap-4">
-          {[
-            { label: "DAYS", value: timeLeft.days },
-            { label: "HOURS", value: timeLeft.hours },
-            { label: "MINS", value: timeLeft.minutes },
-            { label: "SECS", value: timeLeft.seconds },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/90 border border-[#D4AF37]/30 text-center shadow-sm"
-            >
-              <span className="text-2xl sm:text-4xl font-serif font-bold text-[#B8860B]">
-                {String(item.value).padStart(2, "0")}
-              </span>
-              <span className="text-[10px] sm:text-xs font-cinzel text-[#8B6508] tracking-wider mt-1">
-                {item.label}
-              </span>
-            </div>
+export default function CountdownSection() {
+  const target = new Date(wedding.dateISO).getTime();
+  const [parts, setParts] = useState<Parts>(() => getParts(target));
+
+  useEffect(() => {
+    const id = window.setInterval(() => setParts(getParts(target)), 1000);
+    return () => window.clearInterval(id);
+  }, [target]);
+
+  const cells = [
+    { label: "Days", value: parts.days },
+    { label: "Hours", value: parts.hours },
+    { label: "Mins", value: parts.mins },
+    { label: "Secs", value: parts.secs },
+  ];
+
+  return (
+    <section className="relative px-6 py-20">
+      <Reveal className="mx-auto max-w-lg text-center">
+        <p className="text-[11px] uppercase tracking-[0.4em] text-[#8a7a68]">
+          Counting the moments
+        </p>
+        <h2 className="mt-3 font-script text-5xl text-[#1a1814]">
+          Until our ceremony
+        </h2>
+        <div className="mt-10 grid grid-cols-4 gap-3 sm:gap-4">
+          {cells.map((c, i) => (
+            <CountCell
+              key={c.label}
+              label={c.label}
+              value={c.value}
+              delay={i * 0.07}
+            />
           ))}
         </div>
-
-        <p className="text-xs font-sans text-[#2A221E]/70 tracking-wide">
-          21st November 2026 — 7:00 PM (Darees) &amp; 22nd November 2026 — 1:00 PM (Reception)
-        </p>
-      </div>
+      </Reveal>
     </section>
   );
-};
-
-export default CountdownSection;
+}

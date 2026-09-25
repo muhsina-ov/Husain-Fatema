@@ -11,14 +11,14 @@ import {
 
 export default function Venue() {
   const [activeVenueIndex, setActiveVenueIndex] = useState(0);
-  const activeVenue = wedding.venues[activeVenueIndex];
-  const mapTilt = useLocalTilt(4);
+  const currentVenue = wedding.venues[activeVenueIndex];
+  const mapTilt = useLocalTilt(5);
 
   return (
     <section className="relative px-6 py-24">
       <Reveal className="mb-12 flex flex-col items-center gap-3 text-center">
         <span className="text-[11px] uppercase tracking-[0.4em] text-[#8a7a68]">
-          Where & When
+          Where &amp; when
         </span>
         <h2 className="font-script text-5xl text-[#1a1814] sm:text-6xl">
           The Venues
@@ -27,34 +27,37 @@ export default function Venue() {
       </Reveal>
 
       {/* Venue Switcher Tabs */}
-      <div className="mx-auto mb-8 flex max-w-sm justify-center gap-2 rounded-full bg-[#1a1814]/5 p-1.5 ring-1 ring-[rgba(26,24,20,0.06)]">
-        {wedding.venues.map((v, i) => (
+      <Reveal className="mx-auto mb-8 flex max-w-xs justify-center gap-2 rounded-full border border-[#1a1814]/10 bg-white/40 p-1.5 backdrop-blur-sm">
+        {wedding.venues.map((venue, idx) => (
           <button
-            key={v.name}
+            key={venue.id}
             type="button"
-            onClick={() => setActiveVenueIndex(i)}
-            className={`flex-1 rounded-full px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.18em] transition-all duration-300 ${
-              activeVenueIndex === i
-                ? "bg-white text-[#1a1814] shadow-sm"
-                : "text-[#7a6d60] hover:text-[#1a1814]"
+            onClick={() => setActiveVenueIndex(idx)}
+            className={`flex-1 rounded-full py-2 px-3 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
+              activeVenueIndex === idx
+                ? "bg-[#1a1814] text-[#f6f0e6] shadow-sm font-medium"
+                : "text-[#6e6256] hover:text-[#1a1814]"
             }`}
           >
-            {v.name}
+            {venue.name}
           </button>
         ))}
-      </div>
+      </Reveal>
 
       <div className="mx-auto flex max-w-md flex-col gap-6">
-        <Reveal key={activeVenue.name} className="flex flex-col items-center gap-1.5 text-center">
-          <p className="text-[10px] uppercase tracking-[0.24em] text-[#9d7b42]">
-            {activeVenue.event} · {activeVenue.date}
-          </p>
-          <h3 className="font-display text-3xl font-medium text-[#1a1814]">
-            {activeVenue.name}
+        <Reveal key={currentVenue.id} className="flex flex-col items-center gap-2 text-center">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-[#8a7a68]">
+            {currentVenue.event}
+          </span>
+          <h3 className="font-display text-3xl text-[#1a1814]">
+            {currentVenue.name}
           </h3>
-          <p className="flex items-center gap-1.5 text-[13px] text-[#5c5146]">
+          <p className="flex items-center gap-2 text-[13px] text-[#5c5146]">
             <MapPin size={14} className="text-[#8a7a68]" />
-            {activeVenue.mapsQuery}
+            {currentVenue.address}
+          </p>
+          <p className="text-[11px] text-[#7a6d60] tracking-wide">
+            {currentVenue.date} · {currentVenue.time}
           </p>
         </Reveal>
 
@@ -67,9 +70,9 @@ export default function Venue() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <iframe
-              key={activeVenue.mapsQuery}
-              title={`${activeVenue.name} Map`}
-              src={getMapsEmbedUrl(activeVenue.mapsQuery)}
+              key={currentVenue.mapsQuery}
+              title={`${currentVenue.name} map`}
+              src={getMapsEmbedUrl(currentVenue.mapsQuery)}
               className="h-64 w-full saturate-[0.85] contrast-[1.02] sm:h-72"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -79,7 +82,7 @@ export default function Venue() {
 
         <Reveal delay={0.12} className="grid grid-cols-1 gap-3">
           <motion.a
-            href={getMapsDirectionsUrl(activeVenue.mapsQuery)}
+            href={getMapsDirectionsUrl(currentVenue.mapsQuery)}
             target="_blank"
             rel="noreferrer"
             whileHover={{ y: -2, scale: 1.015 }}
@@ -92,7 +95,7 @@ export default function Venue() {
               style={{ animation: "sweep 3.6s ease-in-out infinite" }}
             />
             <Navigation size={15} />
-            Get directions to {activeVenue.name}
+            Get directions to {currentVenue.name}
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-transform duration-500 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-px">
               ↗
             </span>
