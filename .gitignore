@@ -28,3 +28,9 @@ dist-ssr
 .dev.vars
 .worker-next
 .open-next
+
+# Stray media duplicates (canonical copies live in public/assets)
+*.mp4.mp4
+/VID-*.mp4
+/public/VID-*.mp4
+/public/assets/VID-*.mp4.mp4

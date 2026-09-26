@@ -52,10 +52,17 @@ export default function Venue() {
           <h3 className="font-display text-3xl text-[#1a1814]">
             {currentVenue.name}
           </h3>
-          <p className="flex items-center gap-2 text-[13px] text-[#5c5146]">
-            <MapPin size={14} className="text-[#8a7a68]" />
-            {currentVenue.address}
-          </p>
+          <a
+            href={currentVenue.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 text-[13px] text-[#5c5146] hover:text-[#1a1814] transition-colors"
+            title="Open location in Google Maps"
+          >
+            <MapPin size={14} className="text-[#8a7a68] group-hover:text-[#1a1814]" />
+            <span className="underline-offset-2 group-hover:underline">{currentVenue.address}</span>
+            <span className="text-[11px] text-[#8a7a68] transition-transform group-hover:translate-x-0.5">↗</span>
+          </a>
           <p className="text-[11px] text-[#7a6d60] tracking-wide">
             {currentVenue.date} · {currentVenue.time}
           </p>
@@ -65,7 +72,7 @@ export default function Venue() {
           <motion.div
             ref={mapTilt.ref}
             style={mapTilt.style}
-            className="overflow-hidden rounded-[1.75rem] shadow-[0_24px_60px_rgba(60,45,30,0.1)] ring-1 ring-[rgba(26,24,20,0.1)]"
+            className="relative overflow-hidden rounded-[1.75rem] shadow-[0_24px_60px_rgba(60,45,30,0.1)] ring-1 ring-[rgba(26,24,20,0.1)]"
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -77,14 +84,23 @@ export default function Venue() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+            <a
+              href={currentVenue.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.16em] text-[#1a1814] shadow-md backdrop-blur-sm hover:bg-white transition-colors"
+            >
+              <span>Open in Maps</span>
+              <Navigation size={10} className="text-[#8a7a68]" />
+            </a>
           </motion.div>
         </Reveal>
 
         <Reveal delay={0.12} className="grid grid-cols-1 gap-3">
           <motion.a
-            href={getMapsDirectionsUrl(currentVenue.mapsQuery)}
+            href={currentVenue.mapsUrl || getMapsDirectionsUrl(currentVenue.mapsQuery)}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             whileHover={{ y: -2, scale: 1.015 }}
             whileTap={{ scale: 0.98 }}
             className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-[#1a1814] px-8 py-4 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.22)]"

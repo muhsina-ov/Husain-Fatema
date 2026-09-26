@@ -14,6 +14,7 @@ export interface WeddingEvent {
   time: string;
   venue: string;
   mapsQuery: string;
+  mapsUrl: string;
   dateISO: string;
   note: string;
 }
@@ -24,7 +25,7 @@ export const wedding = {
   brideFull: "Fatema Matkawala",
   groomFull: "Husain Kanchwala",
   groomParents: "Son of Mr. Hatim & Mrs. Fatema Kanchwala",
-  brideParents: "Daughter of Mr. Mustali & Mrs. Alifiya Matkawala",
+  brideParents: "Daughter of Mr. Mustali & Mrs. Alefiya Matkawala",
   monogram: "H · F",
 
   // Confirmed Dates (21st & 22nd November 2026)
@@ -49,6 +50,7 @@ export const wedding = {
       time: "Ladies: 7:00 PM | Gents: 8:30 PM",
       venue: "Ezzy Mawaid",
       mapsQuery: "Ezzy Mawaid",
+      mapsUrl: "https://maps.app.goo.gl/anYRRWhqTx4onuCd8?g_st=ic",
       dateISO: "2026-11-21T19:00:00+05:30",
       note: "Khushi Ni Majlis & Shehre Ghaat — an auspicious beginning surrounded by prayers and family warmth.",
     },
@@ -63,6 +65,7 @@ export const wedding = {
       time: "1:00 PM onwards",
       venue: "Shakuntala Farms",
       mapsQuery: "Shakuntala Farms",
+      mapsUrl: "https://maps.app.goo.gl/ZCTzSggNv4r7Mv8r8?g_st=ic",
       dateISO: "2026-11-22T13:00:00+05:30",
       note: "Join us for an afternoon of joy, delicious feast, and celebrations as we begin our new journey together.",
     },
@@ -75,8 +78,9 @@ export const wedding = {
       event: "Khushi Ni Majlis / Shehre Ghaat",
       date: "Saturday, 21st November 2026",
       time: "Ladies: 7:00 PM | Gents: 8:30 PM",
-      address: "Ezzy Mawaid",
-      mapsQuery: "Ezzy Mawaid",
+      address: "Amakin Saifiyah Ezzi Masjid, Balaji Ward, Chandrapur",
+      mapsQuery: "Amakin Saifiyah Ezzi Masjid, Chandrapur, Maharashtra 442402",
+      mapsUrl: "https://maps.app.goo.gl/anYRRWhqTx4onuCd8?g_st=ic",
     },
     {
       id: "shakuntala-farms",
@@ -84,8 +88,9 @@ export const wedding = {
       event: "Wedding Reception",
       date: "Sunday, 22nd November 2026",
       time: "1:00 PM onwards",
-      address: "Shakuntala Farms",
-      mapsQuery: "Shakuntala Farms",
+      address: "Shakuntala Farms, Wadgaon, Chandrapur",
+      mapsQuery: "Shakuntala Farms, Wadgaon, Chandrapur, Maharashtra 442401",
+      mapsUrl: "https://maps.app.goo.gl/ZCTzSggNv4r7Mv8r8?g_st=ic",
     },
   ],
 

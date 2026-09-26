@@ -29,6 +29,7 @@ export default function RSVP() {
     e.preventDefault();
     if (!name.trim()) return;
     setSubmitted(true);
+    sendWhatsAppRSVP();
   };
 
   const sendWhatsAppRSVP = () => {
@@ -36,7 +37,7 @@ export default function RSVP() {
       ? `Assalamu Alaikum! RSVP for ${wedding.groom} & ${wedding.bride}'s Wedding Ceremony:%0A%0A*Name:* ${name}%0A*Status:* Attending with Joy%0A*Guests:* ${guestCount}%0A*Events:* ${selectedEvents.join(", ")}${note ? `%0A*Wishes:* ${note}` : ""}`
       : `Assalamu Alaikum! RSVP for ${wedding.groom} & ${wedding.bride}'s Wedding Ceremony:%0A%0A*Name:* ${name}%0A*Status:* Regretfully Decline${note ? `%0A*Message:* ${note}` : ""}`;
     
-    // WhatsApp URL using customer phone number or direct link
+    // WhatsApp URL using customer phone number (+91 77983 49852)
     window.open(`https://wa.me/917798349852?text=${text}`, "_blank");
   };
 
@@ -196,14 +197,20 @@ export default function RSVP() {
                 </div>
 
                 {/* Submit Button */}
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full rounded-full bg-[#1a1814] py-4 text-[11px] uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.2)] transition-colors hover:bg-[#2c261f]"
-                >
-                  Confirm RSVP
-                </motion.button>
+                <div className="space-y-2">
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex w-full items-center justify-center gap-2.5 rounded-full bg-[#1a1814] py-4 text-[11px] uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.2)] transition-colors hover:bg-[#2c261f]"
+                  >
+                    <MessageCircle size={15} className="text-[#25D366]" />
+                    Send RSVP via WhatsApp
+                  </motion.button>
+                  <p className="text-center text-[10px] uppercase tracking-[0.2em] text-[#8a7a68]">
+                    Responses are delivered directly to the hosts on WhatsApp
+                  </p>
+                </div>
               </motion.form>
             ) : (
               <motion.div
@@ -222,8 +229,11 @@ export default function RSVP() {
                   </h3>
                   <p className="font-display text-base italic text-[#5c5146]">
                     {attending === "yes"
-                      ? "Your RSVP has been confirmed. We eagerly await celebrating with you!"
+                      ? "Your RSVP has been prepared. We eagerly await celebrating with you!"
                       : "Thank you for letting us know. You will be in our thoughts and prayers."}
+                  </p>
+                  <p className="text-[11px] text-[#8a7a68]">
+                    Responses are delivered directly to the hosts on WhatsApp (+91 77983 49852).
                   </p>
                 </div>
 
@@ -236,7 +246,7 @@ export default function RSVP() {
                     className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#1a1814]/15 bg-white/80 py-3.5 px-6 text-[11px] uppercase tracking-[0.2em] text-[#1a1814] shadow-sm hover:bg-white transition-colors"
                   >
                     <MessageCircle size={16} className="text-[#25D366]" />
-                    Send via WhatsApp
+                    Send / Re-open WhatsApp
                   </motion.button>
 
                   <button

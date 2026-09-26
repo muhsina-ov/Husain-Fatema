@@ -119,7 +119,7 @@ export default function Hero() {
           />
         </div>
 
-        {/* Customer Ring Exchange Artwork in Soft Arch Cutout */}
+        {/* Customer Couple Video Artwork in Soft Arch Cutout */}
         <motion.div
           className="absolute inset-0 z-[2] will-change-transform"
           style={layers.couple}
@@ -127,16 +127,28 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.35, duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="absolute bottom-4 left-1/2 flex h-[90%] w-[86%] max-w-[380px] -translate-x-1/2 items-end justify-center">
-            {/* Arched frame wrapper with soft drop shadow */}
-            <div className="relative overflow-hidden rounded-t-[14rem] rounded-b-[2rem] shadow-[0_28px_60px_rgba(60,45,30,0.16)] ring-1 ring-[#1a1814]/10">
-              <img
-                src="/assets/hero-ring-arch.png"
-                alt={`${wedding.groomFull} and ${wedding.brideFull}`}
+          <div className="absolute bottom-14 sm:bottom-20 left-1/2 flex w-[88%] max-w-[380px] sm:max-w-[420px] -translate-x-1/2 items-end justify-center">
+            {/* Arched frame wrapper with soft drop shadow preserving aspect ratio */}
+            <div className="relative w-full aspect-[710/522] overflow-hidden rounded-t-[5.5rem] sm:rounded-t-[6.5rem] rounded-b-[2.25rem] shadow-[0_28px_60px_rgba(60,45,30,0.16)] ring-1 ring-[#1a1814]/12 bg-[#eeb5a6]">
+              <video
+                src="/assets/VID-20260926-WA0032.mp4"
+                poster="/assets/hero-video-poster.jpg"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-label={`${wedding.groomFull} and ${wedding.brideFull}`}
                 className="h-full w-full object-cover"
                 style={{ animation: "waltz-sway-inner 7.5s ease-in-out infinite" }}
-                draggable={false}
-              />
+              >
+                <source src="/assets/VID-20260926-WA0032.mp4" type="video/mp4" />
+                <img
+                  src="/assets/hero-video-poster.jpg"
+                  alt={`${wedding.groomFull} and ${wedding.brideFull}`}
+                  className="h-full w-full object-cover"
+                />
+              </video>
 
               {/* Shimmer sweep effect */}
               <div

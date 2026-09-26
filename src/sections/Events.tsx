@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CalendarPlus, Download } from "lucide-react";
+import { CalendarPlus, Download, MapPin } from "lucide-react";
 import Reveal, { ParallaxBlock } from "../components/Reveal";
 import { useLocalTilt } from "../hooks/useParallax";
 import {
@@ -59,14 +59,38 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
 
       <p className="mt-2 font-display text-lg text-[#3d342c]">{event.time}</p>
 
-      <p className="mt-1 text-sm tracking-wide text-[#5c5146]">{event.venue}</p>
+      <motion.a
+        href={event.mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="group mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#1a1814]/10 bg-white/45 px-3.5 py-1 text-xs text-[#5c5146] transition-colors hover:border-[#1a1814]/25 hover:bg-white/80"
+        title={`Open ${event.venue} on Google Maps`}
+      >
+        <MapPin size={12} className="text-[#8a7a68] group-hover:text-[#1a1814]" />
+        <span>{event.venue}</span>
+        <span className="text-[10px] text-[#8a7a68] transition-transform group-hover:translate-x-0.5">↗</span>
+      </motion.a>
 
       <p className="mx-auto mt-4 max-w-xs font-display text-base italic leading-relaxed text-[#6e6256]">
         {event.note}
       </p>
 
-      {/* Calendar Buttons */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+      {/* Action Buttons: Calendar & Map */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
+        <motion.a
+          href={event.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.97 }}
+          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
+        >
+          <MapPin size={13} className="text-[#8a7a68]" />
+          View Map
+        </motion.a>
+
         <motion.a
           href={createGoogleCalendarUrl(
             event.name,
@@ -78,10 +102,10 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
           rel="noreferrer"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-5 py-2.5 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
+          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
         >
-          <CalendarPlus size={14} className="text-[#8a7a68]" />
-          Add to Google
+          <CalendarPlus size={13} className="text-[#8a7a68]" />
+          Calendar
         </motion.a>
 
         <motion.button
@@ -91,10 +115,10 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
           }
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-5 py-2.5 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
+          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
         >
-          <Download size={14} className="text-[#8a7a68]" />
-          Save .ICS
+          <Download size={13} className="text-[#8a7a68]" />
+          .ICS
         </motion.button>
       </div>
     </motion.div>
