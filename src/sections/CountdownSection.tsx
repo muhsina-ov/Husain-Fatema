@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Reveal from "../components/Reveal";
 import { useLocalTilt } from "../hooks/useParallax";
-import { wedding } from "../config";
+import { wedding as defaultWedding } from "../config";
+import type { WeddingConfig } from "../config";
 
 type Parts = { days: number; hours: number; mins: number; secs: number };
 
@@ -68,8 +69,12 @@ function CountCell({
   );
 }
 
-export default function CountdownSection() {
-  const target = new Date(wedding.dateISO).getTime();
+export default function CountdownSection({
+  config = defaultWedding,
+}: {
+  config?: WeddingConfig;
+}) {
+  const target = new Date(config.dateISO).getTime();
   const [parts, setParts] = useState<Parts>(() => getParts(target));
 
   useEffect(() => {
@@ -91,7 +96,7 @@ export default function CountdownSection() {
           Counting the moments
         </p>
         <h2 className="mt-3 font-script text-5xl text-[#1a1814]">
-          Until our ceremony
+          {config.events.length > 1 ? "Until our ceremony" : "Until our reception"}
         </h2>
         <div className="mt-10 grid grid-cols-4 gap-3 sm:gap-4">
           {cells.map((c, i) => (

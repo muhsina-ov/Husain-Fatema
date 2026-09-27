@@ -8,7 +8,8 @@ import {
 } from "framer-motion";
 import { layerTransform, useParallax } from "../hooks/useParallax";
 import { CursorGlow } from "../components/FloatingPetals";
-import { wedding } from "../config";
+import { wedding as defaultWedding } from "../config";
+import type { WeddingConfig } from "../config";
 
 const SPARKS = Array.from({ length: 26 }, (_, i) => ({
   id: i,
@@ -19,7 +20,11 @@ const SPARKS = Array.from({ length: 26 }, (_, i) => ({
   duration: 2.6 + (i % 6) * 0.4,
 }));
 
-export default function Hero() {
+export default function Hero({
+  config = defaultWedding,
+}: {
+  config?: WeddingConfig;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const point = useParallax(true);
   const [shimmer, setShimmer] = useState(false);
@@ -78,7 +83,6 @@ export default function Hero() {
           className="h-full w-full object-cover opacity-90"
           draggable={false}
           onError={(e) => {
-            // graceful fallback if direct path needed
             (e.currentTarget as HTMLImageElement).style.display = "none";
           }}
         />
@@ -86,7 +90,7 @@ export default function Hero() {
 
       <CursorGlow x={point.x} y={point.y} />
 
-      {/* Centered art stage with customer reference artwork */}
+      {/* Centered art stage with customer video artwork */}
       <motion.div
         className="pointer-events-none absolute inset-x-0 bottom-0 top-[16%] z-[1] mx-auto w-full max-w-[440px] sm:max-w-[480px]"
         style={{ y: artY, scale: artScale, opacity: artOpacity }}
@@ -138,14 +142,14 @@ export default function Hero() {
                 muted
                 playsInline
                 preload="auto"
-                aria-label={`${wedding.groomFull} and ${wedding.brideFull}`}
+                aria-label={`${config.groomFull} and ${config.brideFull}`}
                 className="h-full w-full object-cover"
                 style={{ animation: "waltz-sway-inner 7.5s ease-in-out infinite" }}
               >
                 <source src="/assets/VID-20260926-WA0032.mp4" type="video/mp4" />
                 <img
                   src="/assets/hero-video-poster.jpg"
-                  alt={`${wedding.groomFull} and ${wedding.brideFull}`}
+                  alt={`${config.groomFull} and ${config.brideFull}`}
                   className="h-full w-full object-cover"
                 />
               </video>
@@ -251,7 +255,7 @@ export default function Hero() {
               className="inline-block"
               whileHover={{ y: -3, transition: { duration: 0.35 } }}
             >
-              {wedding.groom}
+              {config.groom}
             </motion.span>
             <span className="mx-2 inline-block font-script text-[0.55em] text-[#8a7a68]">
               &amp;
@@ -260,7 +264,7 @@ export default function Hero() {
               className="inline-block"
               whileHover={{ y: -3, transition: { duration: 0.35 } }}
             >
-              {wedding.bride}
+              {config.bride}
             </motion.span>
           </motion.h1>
 
@@ -277,7 +281,7 @@ export default function Hero() {
             transition={{ delay: 0.9, duration: 0.9 }}
             className="mt-4 font-display text-lg tracking-wide text-[#3d342c] sm:text-xl"
           >
-            {wedding.dateLabel}
+            {config.dateLabel}
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}
@@ -285,7 +289,7 @@ export default function Hero() {
             transition={{ delay: 1.05, duration: 0.8 }}
             className="mt-1 text-[11px] uppercase tracking-[0.32em] text-[#7a6d60]"
           >
-            {wedding.timeLabel}
+            {config.timeLabel}
           </motion.p>
         </div>
       </motion.div>
@@ -299,7 +303,7 @@ export default function Hero() {
         onClick={() =>
           window.scrollTo({ top: window.innerHeight * 0.85, behavior: "smooth" })
         }
-        className="relative z-10 mb-8 flex flex-col items-center gap-2 text-[#7a6d60] transition-colors hover:text-[#1a1814]"
+        className="relative z-10 mb-8 flex flex-col items-center gap-2 text-[#7a6d60] transition-colors hover:text-[#1a1814] cursor-pointer"
         aria-label="Scroll to invitation details"
       >
         <span className="text-[10px] uppercase tracking-[0.38em]">Scroll</span>

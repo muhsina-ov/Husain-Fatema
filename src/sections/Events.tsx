@@ -3,11 +3,11 @@ import { CalendarPlus, Download, MapPin } from "lucide-react";
 import Reveal, { ParallaxBlock } from "../components/Reveal";
 import { useLocalTilt } from "../hooks/useParallax";
 import {
-  wedding,
+  wedding as defaultWedding,
   createGoogleCalendarUrl,
   downloadEventICS,
 } from "../config";
-import type { WeddingEvent } from "../config";
+import type { WeddingConfig, WeddingEvent } from "../config";
 
 function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
   const { ref, style } = useLocalTilt(6);
@@ -115,7 +115,7 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
           }
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80"
+          className="inline-flex items-center gap-2 rounded-full border border-[#1a1814]/12 bg-white/50 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#2c261f] transition-colors duration-500 hover:border-[#1a1814]/25 hover:bg-white/80 cursor-pointer"
         >
           <Download size={13} className="text-[#8a7a68]" />
           .ICS
@@ -125,7 +125,11 @@ function EventCard({ event, index }: { event: WeddingEvent; index: number }) {
   );
 }
 
-export default function Events() {
+export default function Events({
+  config = defaultWedding,
+}: {
+  config?: WeddingConfig;
+}) {
   return (
     <section className="relative overflow-hidden px-6 py-24">
       <ParallaxBlock
@@ -147,13 +151,13 @@ export default function Events() {
           The celebrations
         </span>
         <h2 className="font-script text-5xl text-[#1a1814] sm:text-6xl">
-          Wedding Events
+          {config.events.length > 1 ? "Wedding Events" : "Wedding Reception"}
         </h2>
         <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#1a1814]/25 to-transparent" />
       </Reveal>
 
       <div className="relative mx-auto max-w-lg space-y-10">
-        {wedding.events.map((event, index) => (
+        {config.events.map((event, index) => (
           <Reveal key={event.id} delay={index * 0.12}>
             <EventCard event={event} index={index} />
           </Reveal>

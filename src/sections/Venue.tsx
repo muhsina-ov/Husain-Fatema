@@ -4,14 +4,19 @@ import { motion } from "framer-motion";
 import Reveal from "../components/Reveal";
 import { useLocalTilt } from "../hooks/useParallax";
 import {
-  wedding,
+  wedding as defaultWedding,
   getMapsEmbedUrl,
   getMapsDirectionsUrl,
 } from "../config";
+import type { WeddingConfig } from "../config";
 
-export default function Venue() {
+export default function Venue({
+  config = defaultWedding,
+}: {
+  config?: WeddingConfig;
+}) {
   const [activeVenueIndex, setActiveVenueIndex] = useState(0);
-  const currentVenue = wedding.venues[activeVenueIndex];
+  const currentVenue = config.venues[activeVenueIndex] || config.venues[0];
   const mapTilt = useLocalTilt(5);
 
   return (
@@ -21,28 +26,30 @@ export default function Venue() {
           Where &amp; when
         </span>
         <h2 className="font-script text-5xl text-[#1a1814] sm:text-6xl">
-          The Venues
+          {config.venues.length > 1 ? "The Venues" : "The Venue"}
         </h2>
         <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#1a1814]/25 to-transparent" />
       </Reveal>
 
-      {/* Venue Switcher Tabs */}
-      <Reveal className="mx-auto mb-8 flex max-w-xs justify-center gap-2 rounded-full border border-[#1a1814]/10 bg-white/40 p-1.5 backdrop-blur-sm">
-        {wedding.venues.map((venue, idx) => (
-          <button
-            key={venue.id}
-            type="button"
-            onClick={() => setActiveVenueIndex(idx)}
-            className={`flex-1 rounded-full py-2 px-3 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
-              activeVenueIndex === idx
-                ? "bg-[#1a1814] text-[#f6f0e6] shadow-sm font-medium"
-                : "text-[#6e6256] hover:text-[#1a1814]"
-            }`}
-          >
-            {venue.name}
-          </button>
-        ))}
-      </Reveal>
+      {/* Venue Switcher Tabs only if multiple venues */}
+      {config.venues.length > 1 && (
+        <Reveal className="mx-auto mb-8 flex max-w-xs justify-center gap-2 rounded-full border border-[#1a1814]/10 bg-white/40 p-1.5 backdrop-blur-sm">
+          {config.venues.map((venue, idx) => (
+            <button
+              key={venue.id}
+              type="button"
+              onClick={() => setActiveVenueIndex(idx)}
+              className={`flex-1 rounded-full py-2 px-3 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 cursor-pointer ${
+                activeVenueIndex === idx
+                  ? "bg-[#1a1814] text-[#f6f0e6] shadow-sm font-medium"
+                  : "text-[#6e6256] hover:text-[#1a1814]"
+              }`}
+            >
+              {venue.name}
+            </button>
+          ))}
+        </Reveal>
+      )}
 
       <div className="mx-auto flex max-w-md flex-col gap-6">
         <Reveal key={currentVenue.id} className="flex flex-col items-center gap-2 text-center">
@@ -103,7 +110,7 @@ export default function Venue() {
             rel="noopener noreferrer"
             whileHover={{ y: -2, scale: 1.015 }}
             whileTap={{ scale: 0.98 }}
-            className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-[#1a1814] px-8 py-4 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.22)]"
+            className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-[#1a1814] px-8 py-4 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.22)] cursor-pointer"
           >
             <span
               aria-hidden

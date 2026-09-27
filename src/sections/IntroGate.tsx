@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { wedding } from "../config";
+import { wedding as defaultWedding } from "../config";
+import type { WeddingConfig } from "../config";
 
 const ease: [number, number, number, number] = [0.65, 0, 0.35, 1];
 
 /** Soft paper curtain that parts to reveal the invitation */
 export default function IntroGate({
+  config = defaultWedding,
   onOpening,
   onOpened,
 }: {
+  config?: WeddingConfig;
   onOpening: () => void;
   onOpened: () => void;
 }) {
@@ -106,16 +109,25 @@ export default function IntroGate({
           transition={{ delay: 0.28, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="mt-4 font-script text-5xl text-[#1a1814] sm:text-6xl"
         >
-          {wedding.groom} &amp; {wedding.bride}
+          {config.groom} &amp; {config.bride}
         </motion.h2>
+
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ delay: 0.45, duration: 0.8 }}
+          className="mt-4 h-px w-20 bg-gradient-to-r from-transparent via-[#1a1814]/30 to-transparent"
+        />
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.7 }}
-          className="mt-3 max-w-xs font-display text-base italic leading-relaxed text-[#5c5146]"
+          transition={{ delay: 0.55, duration: 0.7 }}
+          className="mt-3 text-xs uppercase tracking-[0.25em] text-[#7a6d60]"
         >
-          Open gently — our ceremony awaits
+          {config.dateLabel}
         </motion.p>
+
         <motion.button
           type="button"
           onClick={handleOpen}

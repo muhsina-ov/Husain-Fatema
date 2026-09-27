@@ -1,7 +1,12 @@
 import Reveal, { ParallaxBlock } from "../components/Reveal";
-import { wedding } from "../config";
+import { wedding as defaultWedding } from "../config";
+import type { WeddingConfig } from "../config";
 
-export default function Footer() {
+export default function Footer({
+  config = defaultWedding,
+}: {
+  config?: WeddingConfig;
+}) {
   return (
     <footer className="relative overflow-hidden px-6 pb-20 pt-24">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1814]/12 to-transparent" />
@@ -34,7 +39,7 @@ export default function Footer() {
             >
               {Array(4)
                 .fill(
-                  `${wedding.groom} & ${wedding.bride}  ·  ${wedding.dateLabel}  ·  `
+                  `${config.groom} & ${config.bride}  ·  ${config.dateLabel}  ·  `
                 )
                 .join("")}
             </span>
