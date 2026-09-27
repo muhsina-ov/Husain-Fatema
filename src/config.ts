@@ -78,8 +78,24 @@ const sharedBrideParents = "Daughter of Mr. Mustali & Mrs. Alefiya Matkawala";
 const sharedMonogram = "H · F";
 const sharedArabic = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ";
 const sharedBlessing = "By the blessings of His Holiness Syedna Muffadal Saifuddin ᴛᴜꜱ.";
-const sharedFormUrl = "https://docs.google.com/forms/d/1mheMXkFOmHK3tfDxTBOMpRbceGBXfTAGhiXQ7tj8gKE/viewform";
-const sharedFormEditUrl = "https://docs.google.com/forms/d/1mheMXkFOmHK3tfDxTBOMpRbceGBXfTAGhiXQ7tj8gKE/edit?usp=sharing_eil_se_dm&ts=6ab928f0";
+const sharedFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSedjBPW2E7xJqX2rFqPThl8EiuQmiSXjsNZdlaL3gX5o_gq0g/viewform?usp=header";
+const sharedFormResponseUrl = "https://docs.google.com/forms/d/e/1FAIpQLSedjBPW2E7xJqX2rFqPThl8EiuQmiSXjsNZdlaL3gX5o_gq0g/formResponse";
+const sharedFormEditUrl = "https://docs.google.com/forms/d/e/1FAIpQLSedjBPW2E7xJqX2rFqPThl8EiuQmiSXjsNZdlaL3gX5o_gq0g/edit";
+
+export const GOOGLE_FORM_ENTRIES = {
+  formResponseUrl: sharedFormResponseUrl,
+  viewFormUrl: sharedFormUrl,
+  entries: {
+    fullName: "entry.937629421",
+    events: "entry.1063590214",
+    guestCount: "entry.1465495804",
+  },
+  eventOptions: [
+    { id: "majlis", label: "21 Nov - Khushi ni Majlis", date: "21st Nov 2026" },
+    { id: "reception", label: "22nd Nov - Reception", date: "22nd Nov 2026" },
+  ],
+  guestCountOptions: ["1", "2", "3", "4", "5+"],
+};
 
 // Confirmed Events
 const eventSheherghast: WeddingEvent = {
