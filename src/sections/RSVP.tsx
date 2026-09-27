@@ -46,7 +46,11 @@ export default function RSVP({
     }
 
     if (selectedEvents.length === 0) {
-      setErrorMessage("Please select at least one event you will attend.");
+      setErrorMessage(
+        is22NovOnly
+          ? "Please confirm your attendance for the Wedding Reception."
+          : "Please select at least one event you will attend."
+      );
       return;
     }
 
@@ -149,7 +153,9 @@ export default function RSVP({
         </h2>
         <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#1a1814]/25 to-transparent" />
         <p className="mt-2 max-w-md font-display text-base italic leading-relaxed text-[#6e6256]">
-          We would be honored by your gracious presence and heartfelt prayers as we celebrate.
+          {is22NovOnly
+            ? "We would be honored by your gracious presence and heartfelt prayers at our Wedding Reception."
+            : "We would be honored by your gracious presence and heartfelt prayers as we celebrate."}
         </p>
       </Reveal>
 
@@ -178,7 +184,9 @@ export default function RSVP({
                   </h3>
 
                   <p className="mt-2 font-display text-sm leading-relaxed text-[#5c5146]">
-                    Please let us know if you will be joining us so we may warmly prepare for your attendance.
+                    {is22NovOnly
+                      ? "Please confirm if you will be joining us for the Wedding Reception so we may warmly prepare for your attendance."
+                      : "Please let us know if you will be joining us so we may warmly prepare for your attendance."}
                   </p>
                 </div>
 
@@ -207,48 +215,106 @@ export default function RSVP({
                     />
                   </div>
 
-                  {/* Field 2: Events attending */}
-                  <div className="space-y-2.5">
-                    <label className="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#6e6256]">
-                      Events You Will Attend <span className="text-[#994d38]">*</span>
-                    </label>
-                    <div className="space-y-2">
-                      {GOOGLE_FORM_ENTRIES.eventOptions.map((ev) => {
-                        const isSelected = selectedEvents.includes(ev.label);
-                        return (
-                          <button
-                            type="button"
-                            key={ev.id}
-                            onClick={() => toggleEvent(ev.label)}
-                            disabled={isSubmitting}
-                            className={`flex w-full items-center justify-between rounded-xl border p-3.5 text-left transition-all ${
-                              isSelected
-                                ? "border-[#1a1814] bg-[#1a1814]/[0.04] text-[#1a1814] shadow-sm"
-                                : "border-[#1a1814]/10 bg-white/60 text-[#5c5146] hover:border-[#1a1814]/25 hover:bg-white/80"
+                  {/* Field 2: Events / Attendance Confirmation */}
+                  {is22NovOnly ? (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#6e6256]">
+                          Attending Reception <span className="text-[#994d38]">*</span>
+                        </label>
+                        <span className="text-[10px] uppercase tracking-wider text-[#8a7a68]">
+                          Sunday, 22nd Nov 2026
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleEvent("22nd Nov - Reception")}
+                        disabled={isSubmitting}
+                        className={`flex w-full items-center justify-between rounded-xl border p-4 text-left transition-all cursor-pointer ${
+                          selectedEvents.includes("22nd Nov - Reception")
+                            ? "border-[#1a1814] bg-[#1a1814]/[0.04] text-[#1a1814] shadow-sm"
+                            : "border-[#1a1814]/15 bg-white/60 text-[#5c5146] hover:border-[#1a1814]/30 hover:bg-white/80"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3.5">
+                          <div
+                            className={`flex h-6 w-6 items-center justify-center rounded-lg border transition-colors ${
+                              selectedEvents.includes("22nd Nov - Reception")
+                                ? "border-[#1a1814] bg-[#1a1814] text-[#f6f0e6]"
+                                : "border-[#1a1814]/25 bg-white"
                             }`}
                           >
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
-                                  isSelected
-                                    ? "border-[#1a1814] bg-[#1a1814] text-[#f6f0e6]"
-                                    : "border-[#1a1814]/20 bg-white"
-                                }`}
-                              >
-                                {isSelected && <Check size={13} strokeWidth={3} />}
-                              </div>
-                              <span className="text-xs font-medium tracking-wide">
-                                {ev.label}
-                              </span>
-                            </div>
-                            <span className="text-[10px] uppercase tracking-wider text-[#8a7a68]">
-                              {ev.date}
+                            {selectedEvents.includes("22nd Nov - Reception") && (
+                              <Check size={14} strokeWidth={3} />
+                            )}
+                          </div>
+                          <div>
+                            <span className="text-xs font-semibold tracking-wide block text-[#1a1814]">
+                              {selectedEvents.includes("22nd Nov - Reception")
+                                ? "Yes, I will be attending the Reception"
+                                : "Click to confirm attendance"}
                             </span>
-                          </button>
-                        );
-                      })}
+                            <span className="text-[11px] text-[#6e6256]">
+                              Shakuntala Farms · 1:00 PM onwards
+                            </span>
+                          </div>
+                        </div>
+                        <span
+                          className={`rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-wider ${
+                            selectedEvents.includes("22nd Nov - Reception")
+                              ? "bg-[#1a1814] text-[#f6f0e6]"
+                              : "bg-[#1a1814]/10 text-[#5c5146]"
+                          }`}
+                        >
+                          {selectedEvents.includes("22nd Nov - Reception") ? "Attending" : "Select"}
+                        </span>
+                      </button>
                     </div>
-                  </div>
+                  ) : (
+                    /* Link 1: Both events options */
+                    <div className="space-y-2.5">
+                      <label className="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#6e6256]">
+                        Events You Will Attend <span className="text-[#994d38]">*</span>
+                      </label>
+                      <div className="space-y-2">
+                        {GOOGLE_FORM_ENTRIES.eventOptions.map((ev) => {
+                          const isSelected = selectedEvents.includes(ev.label);
+                          return (
+                            <button
+                              type="button"
+                              key={ev.id}
+                              onClick={() => toggleEvent(ev.label)}
+                              disabled={isSubmitting}
+                              className={`flex w-full items-center justify-between rounded-xl border p-3.5 text-left transition-all cursor-pointer ${
+                                isSelected
+                                  ? "border-[#1a1814] bg-[#1a1814]/[0.04] text-[#1a1814] shadow-sm"
+                                  : "border-[#1a1814]/10 bg-white/60 text-[#5c5146] hover:border-[#1a1814]/25 hover:bg-white/80"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`flex h-5 w-5 items-center justify-center rounded-md border transition-colors ${
+                                    isSelected
+                                      ? "border-[#1a1814] bg-[#1a1814] text-[#f6f0e6]"
+                                      : "border-[#1a1814]/20 bg-white"
+                                  }`}
+                                >
+                                  {isSelected && <Check size={13} strokeWidth={3} />}
+                                </div>
+                                <span className="text-xs font-medium tracking-wide">
+                                  {ev.label}
+                                </span>
+                              </div>
+                              <span className="text-[10px] uppercase tracking-wider text-[#8a7a68]">
+                                {ev.date}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Field 3: Number of Guests */}
                   <div className="space-y-2.5">
@@ -270,7 +336,7 @@ export default function RSVP({
                             key={cnt}
                             onClick={() => setGuestCount(cnt)}
                             disabled={isSubmitting}
-                            className={`flex flex-col items-center justify-center rounded-xl border py-2.5 text-xs font-medium transition-all ${
+                            className={`flex flex-col items-center justify-center rounded-xl border py-2.5 text-xs font-medium transition-all cursor-pointer ${
                               isSelected
                                 ? "border-[#1a1814] bg-[#1a1814] text-[#f6f0e6] shadow-md shadow-[#1a1814]/10"
                                 : "border-[#1a1814]/10 bg-white/70 text-[#4a4036] hover:border-[#1a1814]/25 hover:bg-white"
@@ -301,7 +367,7 @@ export default function RSVP({
                       disabled={isSubmitting}
                       whileHover={!isSubmitting ? { scale: 1.015, y: -1 } : {}}
                       whileTap={!isSubmitting ? { scale: 0.985 } : {}}
-                      className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-[#1a1814] py-4 px-6 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.2)] transition-all hover:bg-[#2c261f] disabled:cursor-not-allowed disabled:opacity-75"
+                      className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-[#1a1814] py-4 px-6 text-[11px] font-medium uppercase tracking-[0.25em] text-[#f6f0e6] shadow-[0_14px_36px_rgba(40,30,20,0.2)] transition-all hover:bg-[#2c261f] disabled:cursor-not-allowed disabled:opacity-75 cursor-pointer"
                     >
                       <span
                         aria-hidden
@@ -352,7 +418,9 @@ export default function RSVP({
                 </h3>
 
                 <p className="mx-auto mt-3 max-w-sm font-display text-base leading-relaxed text-[#5c5146]">
-                  Your attendance has been graciously recorded. We eagerly look forward to celebrating this blessed occasion together.
+                  {is22NovOnly
+                    ? "Your attendance for the Wedding Reception has been graciously recorded. We eagerly look forward to celebrating with you."
+                    : "Your attendance has been graciously recorded. We eagerly look forward to celebrating this blessed occasion together."}
                 </p>
 
                 {/* Summary Card */}
@@ -362,12 +430,14 @@ export default function RSVP({
                       <CalendarCheck size={16} className="mt-0.5 text-[#8a7a68] shrink-0" />
                       <div>
                         <span className="text-[10px] uppercase tracking-wider text-[#8a7a68] block">
-                          Attending Events
+                          {is22NovOnly ? "Attending Event" : "Attending Events"}
                         </span>
                         <ul className="mt-0.5 text-xs font-medium text-[#1a1814] space-y-0.5">
-                          {selectedEvents.map((ev, i) => (
-                            <li key={i}>{ev}</li>
-                          ))}
+                          {is22NovOnly ? (
+                            <li>Wedding Reception — Sunday, 22nd Nov 2026</li>
+                          ) : (
+                            selectedEvents.map((ev, i) => <li key={i}>{ev}</li>)
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -392,7 +462,7 @@ export default function RSVP({
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#7a6d60] transition-colors hover:text-[#1a1814]"
+                    className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-[#7a6d60] transition-colors hover:text-[#1a1814] cursor-pointer"
                   >
                     <RotateCcw size={13} />
                     <span>Submit another response</span>
